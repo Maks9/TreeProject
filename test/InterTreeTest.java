@@ -12,16 +12,19 @@ public class InterTreeTest {
 
         InterTree.Leaf testLeaf1 = new InterTree.Leaf(2);
         InterTree.Leaf testLeaf2 = new InterTree.Leaf(1);
-        InterTree.Leaf testLeaf3 = null;
+        InterTree.Leaf testLeaf3 = new InterTree.Leaf(3);
+        InterTree.Leaf testLeaf4 = null;
 
         testNode1.addLeaf(testLeaf1);
         testNode1.addLeaf(testLeaf2);
         testNode1.addLeaf(testLeaf3);
-        testNode2.addLeaf(testLeaf3);
+        testNode1.addLeaf(testLeaf4);
+        testNode2.addLeaf(testLeaf4);
 
         Assert.assertEquals(testLeaf1, testNode1.getLeaf());
         Assert.assertEquals(testLeaf2, testNode1.getLeaf().getNext());
-        Assert.assertEquals(null, testNode1.getLeaf().getNext().getNext());
+        Assert.assertEquals(testLeaf3, testNode1.getLeaf().getNext().getNext());
+        Assert.assertEquals(null, testNode1.getLeaf().getNext().getNext().getNext());
         Assert.assertEquals(null, testNode2.getLeaf());
 
     }
