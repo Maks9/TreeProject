@@ -43,6 +43,15 @@ public class InterTree {
         this.head = head;
     }
 
+    /**
+     * Sorting leaves and checking for the weight consistency of the head node and its child nodes.
+     * Cut leaves are transmitted to the next node. Excess leaves are returned.
+     *
+     * @return the head of the singly linked list of excess leaves.
+     */
+    public Leaf normalizeTree() {
+        return head.normalizeNode(null);
+    }
 
     /**
      * The main building block for the <tt>InterTree</tt>. Nodes may have <tt>List</tt> of no limited number of other
@@ -137,12 +146,140 @@ public class InterTree {
             iter.next = leaf;
         }
 
+        /**
+         * Sorts singly linked list of leaves.
+         */
+        public void sortLeaves() {
+            leaf = mergeSort(leaf);
+        }
+
+        /**
+         * Merge sort algorythm implementation for singly linked list of leaves.
+         *
+         * @param leaf the head of the list to sort.
+         * @return head of the sorted list of leaves.
+         */
+        private Leaf mergeSort(Leaf leaf) {
+            if (leaf == null || leaf.next == null) return leaf;
+
+            Leaf middle = findMiddle(leaf);
+            Leaf middleNext = middle.next;
+            middle.next = null;
+
+            Leaf leftList = mergeSort(leaf);
+            Leaf rightList = mergeSort(middleNext);
+
+            return merge(leftList, rightList);
+
+        }
+
+        /**
+         * Helping function for merge sort to find the middle of the singly linked list of leaves.
+         *
+         * @param head the head of the list.
+         * @return middle element of the list of leaves.
+         */
+        private Leaf findMiddle(Leaf head) {
+            if (leaf == null) return leaf;
+
+            Leaf iterSlow = head;
+            Leaf iterFast = head.next;
+            while (iterFast != null) {
+                iterFast = iterFast.next;
+                if (iterFast != null) {
+                    iterFast = iterFast.next;
+                    iterSlow = iterSlow.next;
+                }
+            }
+            return iterSlow;
+        }
+
+        /**
+         * Merging function for two sorted singly linked lists.
+         *
+         * @param first the head of the first sorted list.
+         * @param second the head of the second sorted list.
+         * @return the head of the merged list.
+         */
+        private Leaf merge(Leaf first, Leaf second) {
+            if (first == null) return second;
+            if (second == null) return first;
+
+            Leaf merged = null;
+
+            if (first.compareTo(second) < 0) {
+                merged = first;
+                merged.next = merge(first.next, second);
+            } else {
+                merged = second;
+                merged.next = merge(first, second.next);
+            }
+
+            return merged;
+        }
+
+        /**
+         * Check function that compare <tt>totalWeight</tt> of the node with weights of sorted singly linked list
+         * of leaves. If total weight of lives is grater than node <tt>totalWeight</tt> parameter then excess leaves
+         * are cut from node and returned by the function.
+         *
+         * @return the head of singly linked list of cut leaves.
+         */
+        public Leaf checkLeaves() {
+
+            if (leaf == null) return null;
+            if (leaf.getWeight() > totalWeight) {
+                Leaf temp = leaf;
+                leaf = null;
+                return temp;
+            }
+
+            int sum = leaf.getWeight();
+            Leaf iter = leaf;
+            while (iter.next != null) {
+                int iterNextWeight = iter.next.getWeight();
+                if (sum + iterNextWeight <= totalWeight) {
+                    sum += iterNextWeight;
+                } else {
+                    Leaf temp = iter.next;
+                    iter.next = null;
+                    return temp;
+                }
+                iter = iter.next;
+            }
+
+            return null;
+        }
+
+        /**
+         * Sorting leaves and checking for the weight consistency of the tree of the node and its child nodes.
+         * Cut leaves are transmitted to the next node. Excess leaves are thrown away.
+         *
+         * @param leaf the head of the singly linked list of leaves to be added before sort and weight check.
+         * @return the head of singly linked list of cut leaves.
+         */
+        public Leaf normalizeNode(Leaf leaf) {
+
+            if (leaf != null) addLeaf(leaf);
+
+            sortLeaves();
+            Leaf cutLeaves = checkLeaves();
+
+            if (nodes != null) {
+                for (Node node : nodes) {
+                    cutLeaves = node.normalizeNode(cutLeaves);
+                }
+            }
+
+            return cutLeaves;
+        }
+
     }
 
     /**
      * The Leaf of the <tt>InterTree</tt>. Leaf may have link to the other leaf. Each leaf has its weight property.
      */
-    public static class Leaf {
+    public static class Leaf implements Comparable<Leaf>{
 
         /**
          * Integer non-zero number.
@@ -183,6 +320,23 @@ public class InterTree {
          */
         public Leaf getNext() {
             return next;
+        }
+
+        /**
+         * Compare two leafs based on their weight.
+         *
+         * @return <tt>int</tt> number >0 if argument is less than this leaf.
+         */
+        @Override
+        public int compareTo(Leaf leaf) {
+
+            if (this.getWeight() > leaf.getWeight()) {
+                return 1;
+            } else if (this.getWeight() < leaf.getWeight()) {
+                return -1;
+            }
+
+            return 0;
         }
 
     }
