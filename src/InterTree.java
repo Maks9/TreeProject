@@ -137,12 +137,84 @@ public class InterTree {
             iter.next = leaf;
         }
 
+        /**
+         * Sorts singly linked list of leaves.
+         */
+        public void sortLeaves() {
+            leaf = mergeSort(leaf);
+        }
+
+        /**
+         * Merge sort algorythm implementation for singly linked list of leaves.
+         *
+         * @param leaf the head of the list to sort.
+         * @return head of the sorted list of leaves.
+         */
+        private Leaf mergeSort(Leaf leaf) {
+            if (leaf == null || leaf.next == null) return leaf;
+
+            Leaf middle = findMiddle(leaf);
+            Leaf middleNext = middle.next;
+            middle.next = null;
+
+            Leaf leftList = mergeSort(leaf);
+            Leaf rightList = mergeSort(middleNext);
+
+            return merge(leftList, rightList);
+
+        }
+
+        /**
+         * Helping function for merge sort to find the middle of the singly linked list of leaves.
+         *
+         * @param head the head of the list.
+         * @return middle element of the list of leaves.
+         */
+        private Leaf findMiddle(Leaf head) {
+            if (leaf == null) return leaf;
+
+            Leaf iterSlow = head;
+            Leaf iterFast = head.next;
+            while (iterFast != null) {
+                iterFast = iterFast.next;
+                if (iterFast != null) {
+                    iterFast = iterFast.next;
+                    iterSlow = iterSlow.next;
+                }
+            }
+            return iterSlow;
+        }
+
+        /**
+         * Merging function for two sorted singly linked lists.
+         *
+         * @param first the head of the first sorted list.
+         * @param second the head of the second sorted list.
+         * @return the head of the merged list.
+         */
+        private Leaf merge(Leaf first, Leaf second) {
+            if (first == null) return second;
+            if (second == null) return first;
+
+            Leaf merged = null;
+
+            if (first.compareTo(second) < 0) {
+                merged = first;
+                merged.next = merge(first.next, second);
+            } else {
+                merged = second;
+                merged.next = merge(first, second.next);
+            }
+
+            return merged;
+        }
+
     }
 
     /**
      * The Leaf of the <tt>InterTree</tt>. Leaf may have link to the other leaf. Each leaf has its weight property.
      */
-    public static class Leaf {
+    public static class Leaf implements Comparable<Leaf>{
 
         /**
          * Integer non-zero number.
@@ -183,6 +255,23 @@ public class InterTree {
          */
         public Leaf getNext() {
             return next;
+        }
+
+        /**
+         * Compare two leafs based on their weight.
+         *
+         * @return <tt>int</tt> number >0 if argument is less than this leaf.
+         */
+        @Override
+        public int compareTo(Leaf leaf) {
+
+            if (this.getWeight() > leaf.getWeight()) {
+                return 1;
+            } else if (this.getWeight() < leaf.getWeight()) {
+                return -1;
+            }
+
+            return 0;
         }
 
     }
