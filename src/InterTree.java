@@ -242,6 +242,29 @@ public class InterTree {
             return null;
         }
 
+        /**
+         * Sorting and checking for the weight consistency leaves of the tree of the node and its child nodes.
+         * Cut leaves are transmitted to the next node. Excess leaves are thrown away.
+         *
+         * @param leaf the head of the singly linked list of leaves to be added before sort and weight check.
+         * @return the head of singly linked list of cut leaves.
+         */
+        public Leaf normalizeNode(Leaf leaf) {
+
+            if (leaf != null) addLeaf(leaf);
+
+            sortLeaves();
+            Leaf cutLeaves = checkLeaves();
+
+            if (nodes != null) {
+                for (Node node : nodes) {
+                    cutLeaves = node.normalizeNode(cutLeaves);
+                }
+            }
+
+            return cutLeaves;
+        }
+
     }
 
     /**

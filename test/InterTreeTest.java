@@ -197,4 +197,15 @@ public class InterTreeTest {
         Assert.assertEquals(6, excessLeaves.getNext().getNext().getWeight());
         Assert.assertEquals(7, excessLeaves.getNext().getNext().getNext().getWeight());
     }
+
+    @Test
+    public void testNormalizeNode() {
+
+        InterTree.Leaf excessLeaves = node1.normalizeNode(null);
+
+        Assert.assertEquals(9, excessLeaves.getWeight());
+        Assert.assertEquals(12, excessLeaves.getNext().getWeight());
+        Assert.assertNull(excessLeaves.getNext().getNext());
+
+    }
 }
