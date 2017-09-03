@@ -43,6 +43,15 @@ public class InterTree {
         this.head = head;
     }
 
+    /**
+     * Sorting leaves and checking for the weight consistency of the head node and its child nodes.
+     * Cut leaves are transmitted to the next node. Excess leaves are returned.
+     *
+     * @return the head of the singly linked list of excess leaves.
+     */
+    public Leaf normalizeTree() {
+        return head.normalizeNode(null);
+    }
 
     /**
      * The main building block for the <tt>InterTree</tt>. Nodes may have <tt>List</tt> of no limited number of other
@@ -243,7 +252,7 @@ public class InterTree {
         }
 
         /**
-         * Sorting and checking for the weight consistency leaves of the tree of the node and its child nodes.
+         * Sorting leaves and checking for the weight consistency of the tree of the node and its child nodes.
          * Cut leaves are transmitted to the next node. Excess leaves are thrown away.
          *
          * @param leaf the head of the singly linked list of leaves to be added before sort and weight check.

@@ -199,9 +199,9 @@ public class InterTreeTest {
     }
 
     @Test
-    public void testNormalizeNode() {
+    public void testNormalizeTree() {
 
-        InterTree.Leaf excessLeaves = node1.normalizeNode(null);
+        InterTree.Leaf excessLeaves = tree.normalizeTree();
 
         Assert.assertEquals(9, excessLeaves.getWeight());
         Assert.assertEquals(12, excessLeaves.getNext().getWeight());
