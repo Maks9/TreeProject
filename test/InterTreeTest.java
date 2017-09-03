@@ -211,7 +211,7 @@ public class InterTreeTest {
     }
 
     @Test
-    @Ignore //Optional. lasts 2 minutes.
+    @Ignore //Optional. Estimated execution time - 2 minutes.
     public void testWidthAndDepth() {
 
         InterTree.Node head = new InterTree.Node(4);
