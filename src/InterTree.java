@@ -75,8 +75,12 @@ public class InterTree {
          * <tt>nodes</tt>, <tt>leaf</tt>, <tt>parent</tt> fields are initialized with <tt>null</tt>.
          *
          * @param totalWeight weight parameter of the node.
+         * @throws IllegalArgumentException if the argument is less or equal to zero
          */
         Node(int totalWeight) {
+            if (totalWeight <= 0) {
+                throw new IllegalArgumentException("totalWeight should be > 0");
+            }
             this.totalWeight = totalWeight;
             nodes = null;
             parent = null;
@@ -154,8 +158,12 @@ public class InterTree {
          * Constructs a new leaf with the given weight.
          *
          * @param weight weight parameter of the leaf.
+         * @throws IllegalArgumentException if the argument is less or equal to zero
          */
         Leaf(int weight) {
+            if (weight <= 0) {
+                throw new IllegalArgumentException("Weight should be > 0");
+            }
             this.weight = weight;
         }
 
