@@ -112,8 +112,8 @@ public class InterTreeTest {
         Assert.assertEquals(testLeaf1, testNode1.getLeaf());
         Assert.assertEquals(testLeaf2, testNode1.getLeaf().getNext());
         Assert.assertEquals(testLeaf3, testNode1.getLeaf().getNext().getNext());
-        Assert.assertEquals(null, testNode1.getLeaf().getNext().getNext().getNext());
-        Assert.assertEquals(null, testNode2.getLeaf());
+        Assert.assertNull(testNode1.getLeaf().getNext().getNext().getNext());
+        Assert.assertNull(testNode2.getLeaf());
 
     }
 
@@ -145,7 +145,7 @@ public class InterTreeTest {
         node2.sortLeaves();
         node1.sortLeaves();
 
-        Assert.assertEquals(null, node3.getLeaf());
+        Assert.assertNull(node3.getLeaf());
 
         Assert.assertEquals(8, node7.getLeaf().getWeight());
 
@@ -169,5 +169,32 @@ public class InterTreeTest {
         Assert.assertEquals(5, node1.getLeaf().getNext().getNext().getNext().getNext().getNext().getWeight());
         Assert.assertEquals(6, node1.getLeaf().getNext().getNext().getNext().getNext().getNext().getNext().getWeight());
         Assert.assertEquals(7, node1.getLeaf().getNext().getNext().getNext().getNext().getNext().getNext().getNext().getWeight());
+    }
+
+    @Test
+    public void testCheckLeaves() {
+
+        node3.sortLeaves();
+        node7.sortLeaves();
+        node5.sortLeaves();
+        node6.sortLeaves();
+        node1.sortLeaves();
+
+        Assert.assertNull(node3.checkLeaves());
+
+        Assert.assertNull(node7.checkLeaves());
+
+        Assert.assertNull(node5.checkLeaves());
+
+        InterTree.Leaf excessLeaves = node6.checkLeaves();
+        Assert.assertEquals(3, excessLeaves.getWeight());
+        Assert.assertEquals(6, excessLeaves.getNext().getWeight());
+        Assert.assertNull(excessLeaves.getNext().getNext());
+
+        excessLeaves = node1.checkLeaves();
+        Assert.assertEquals(4, excessLeaves.getWeight());
+        Assert.assertEquals(5, excessLeaves.getNext().getWeight());
+        Assert.assertEquals(6, excessLeaves.getNext().getNext().getWeight());
+        Assert.assertEquals(7, excessLeaves.getNext().getNext().getNext().getWeight());
     }
 }

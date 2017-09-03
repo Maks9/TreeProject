@@ -209,6 +209,39 @@ public class InterTree {
             return merged;
         }
 
+        /**
+         * Check function that compare <tt>totalWeight</tt> of the node with weights of sorted singly linked list
+         * of leaves. If total weight of lives is grater than node <tt>totalWeight</tt> parameter then excess leaves
+         * are cut from node and returned by the function.
+         *
+         * @return the head of singly linked list of cut leaves.
+         */
+        public Leaf checkLeaves() {
+
+            if (leaf == null) return null;
+            if (leaf.getWeight() > totalWeight) {
+                Leaf temp = leaf;
+                leaf = null;
+                return temp;
+            }
+
+            int sum = leaf.getWeight();
+            Leaf iter = leaf;
+            while (iter.next != null) {
+                int iterNextWeight = iter.next.getWeight();
+                if (sum + iterNextWeight <= totalWeight) {
+                    sum += iterNextWeight;
+                } else {
+                    Leaf temp = iter.next;
+                    iter.next = null;
+                    return temp;
+                }
+                iter = iter.next;
+            }
+
+            return null;
+        }
+
     }
 
     /**
