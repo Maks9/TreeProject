@@ -1,6 +1,4 @@
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 public class InterTreeTest {
 
@@ -89,7 +87,6 @@ public class InterTreeTest {
         node10.addNode(node12);
 
         tree = new InterTree(node1);
-
     }
 
     @Test
@@ -201,11 +198,53 @@ public class InterTreeTest {
     @Test
     public void testNormalizeTree() {
 
+        System.out.println("\n" + tree);
+
         InterTree.Leaf excessLeaves = tree.normalizeTree();
 
         Assert.assertEquals(9, excessLeaves.getWeight());
         Assert.assertEquals(12, excessLeaves.getNext().getWeight());
         Assert.assertNull(excessLeaves.getNext().getNext());
 
+        System.out.println("\n" + tree);
+
+    }
+
+    @Test
+    @Ignore //Optional. lasts 2 minutes.
+    public void testWidthAndDepth() {
+
+        InterTree.Node head = new InterTree.Node(4);
+
+        // 3*10^6 * 100 leaves
+        head = addNodes(head, 3, 6, 100);
+
+        InterTree.Leaf excessLeaves = head.normalizeNode(null);
+
+    }
+
+    private InterTree.Node addNodes(InterTree.Node node, int width, int depth, int leaves) {
+
+        node = addLeaves(node,leaves);
+        for (int i = 0; i < width; i++) {
+            InterTree.Node nodeAdded = new InterTree.Node(286);
+            if (depth > 0) {
+                nodeAdded = addNodes(nodeAdded, width, depth - 1, leaves);
+            }
+            nodeAdded = addLeaves(nodeAdded,leaves);
+            node.addNode(nodeAdded);
+        }
+
+        return node;
+    }
+
+    private InterTree.Node addLeaves(InterTree.Node node, int leaves) {
+
+        for (int j = 0; j < leaves; j++) {
+            InterTree.Leaf leafAdded = new InterTree.Leaf(3);
+            node.addLeaf(leafAdded);
+        }
+
+        return node;
     }
 }

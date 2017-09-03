@@ -53,6 +53,11 @@ public class InterTree {
         return head.normalizeNode(null);
     }
 
+    @Override
+    public String toString() {
+        return head.toString();
+    }
+
     /**
      * The main building block for the <tt>InterTree</tt>. Nodes may have <tt>List</tt> of no limited number of other
      * nodes and may have singly linked leaves. Each Node have its weight property.
@@ -86,7 +91,7 @@ public class InterTree {
          * @param totalWeight weight parameter of the node.
          * @throws IllegalArgumentException if the argument is less or equal to zero
          */
-        Node(int totalWeight) {
+        public Node(int totalWeight) {
             if (totalWeight <= 0) {
                 throw new IllegalArgumentException("totalWeight should be > 0");
             }
@@ -205,14 +210,32 @@ public class InterTree {
             if (first == null) return second;
             if (second == null) return first;
 
-            Leaf merged = null;
-
+            Leaf merged;
             if (first.compareTo(second) < 0) {
                 merged = first;
-                merged.next = merge(first.next, second);
+                first = first.next;
             } else {
                 merged = second;
-                merged.next = merge(first, second.next);
+                second = second.next;
+            }
+
+            Leaf iter = merged;
+            while (first != null && second != null) {
+                if (first.compareTo(second) < 0) {
+                    iter.next = first;
+                    first = first.next;
+                } else {
+                    iter.next = second;
+                    second = second.next;
+                }
+                iter = iter.next;
+            }
+
+            if (first != null) {
+                iter.next = first;
+            }
+            if (second != null) {
+                iter.next = second;
             }
 
             return merged;
@@ -274,6 +297,33 @@ public class InterTree {
             return cutLeaves;
         }
 
+        @Override
+        public String toString() {
+
+            StringBuilder sb = new StringBuilder();
+
+            sb.append("Node: (totalWeight - ").append(totalWeight).append(") leaves: [");
+            Leaf iter = leaf;
+            while (iter != null){
+                sb.append(iter.getWeight());
+                sb.append(", ");
+                iter = iter.next;
+            }
+            sb.append("]\n");
+
+            StringBuilder sbForLoop = new StringBuilder();
+            if (nodes != null) {
+                sb.append("  Nodes: {\n");
+                for (Node node : nodes) {
+                    sbForLoop.append(node.toString());
+                }
+                sb.append("    ").append(sbForLoop.toString().replace("\n", "\n    "));
+                sb.append("}\n");
+            }
+
+            return sb.toString().replace(", ]","]");
+        }
+
     }
 
     /**
@@ -297,7 +347,7 @@ public class InterTree {
          * @param weight weight parameter of the leaf.
          * @throws IllegalArgumentException if the argument is less or equal to zero
          */
-        Leaf(int weight) {
+        public Leaf(int weight) {
             if (weight <= 0) {
                 throw new IllegalArgumentException("Weight should be > 0");
             }
