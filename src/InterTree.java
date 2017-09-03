@@ -375,7 +375,7 @@ public class InterTree {
         /**
          * Compare two leafs based on their weight.
          *
-         * @return <tt>int</tt> number >0 if argument is less than this leaf.
+         * @return <tt>int</tt> number &gt;0 if argument is less than this leaf.
          */
         @Override
         public int compareTo(Leaf leaf) {
